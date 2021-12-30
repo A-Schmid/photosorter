@@ -5,7 +5,7 @@ OUTPUT_DIR=$2
 
 # recursively find all CR2 Canon raw files in INPUT_DIR
 # (this should also work with other image formats)
-find $INPUT_DIR -name \*.CR2 | while read file; do
+find "$INPUT_DIR" -name \*.CR2 | while read file; do
 
     # check if the file exists
     if test -f "$file";
@@ -14,7 +14,7 @@ find $INPUT_DIR -name \*.CR2 | while read file; do
         FILENAME=$(echo $file | grep -o '[^/]*$')
 
         # extract capturing date from exif metadata
-        DATE=$(mediainfo --language=raw --Inform="Image;%Encoded_Date%" $file | awk -F' ' '{print $1}' | tr ':' '-')
+        DATE=$(mediainfo --language=raw --Inform="Image;%Encoded_Date%" "$file" | awk -F' ' '{print $1}' | tr ':' '-')
 
         # create output directory for the current date if it does not exist yet
         if [ ! -d "$OUTPUT_DIR/$DATE" ]; then
@@ -29,7 +29,7 @@ find $INPUT_DIR -name \*.CR2 | while read file; do
         fi
 
         # copy file
-        cp $file "$OUTPUT_DIR/$DATE/"
+        cp "$file" "$OUTPUT_DIR/$DATE/"
 
         # use this line to create a symlink instead of copying
         #ln -sr $file "$OUTPUT_DIR/$DATE/"
